@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/raghavk266/Solidity/issues"
   },
-  "homepage": "https://github.com/raghavk266/Solidity#readme"
+  "homepage": "https://github.com/raghavk266/Solidity#readme",
+  "dependencies": {
+    "solc": "^0.4.17"
+  }
 }
