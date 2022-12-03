@@ -44,10 +44,50 @@ describe('Lottery Contract',()=>{
         const players = await lottery.methods.getAllParticipants().call({
             from: accounts[0]
         });
-
         assert.equal(players[0], accounts[0]);
         assert.equal(players[1], accounts[1]);
         assert.equal(players[2], accounts[2]);
         assert.equal(players.length,3);
+    });
+    
+    it('minimum amount of ether check',async()=>{
+        try{
+            await lottery.methods.addParticipant().send({
+                from: accounts[0],
+                value: 0
+            });
+            assert(false);
+        }catch(err){
+            assert(err);
+        }
+    });
+    it('only manager can call the winner', async ()=>{
+        try{
+            await lottery.methods.chooseWinner().send({
+                from: accounts[1]
+            })
+            assert(false);
+        }catch(err)
+        {
+            assert(err);
+        }
+    });
+    it('is manager', async ()=>{
+        await lottery.methods.addParticipant().send({
+            from: accounts[0],
+            value: web3.utils.toWei('0.02', 'ether')
+        });
+        await lottery.methods.addParticipant().send({
+            from: accounts[1],
+            value: web3.utils.toWei('0.02', 'ether')
+        });
+        await lottery.methods.addParticipant().send({
+            from: accounts[2],
+            value: web3.utils.toWei('0.02', 'ether')
+        });
+        const mnger = await lottery.methods.manager().call();
+        await lottery.methods.chooseWinner.call({
+            from : mnger
+        });
     })
 });
